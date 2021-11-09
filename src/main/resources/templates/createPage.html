@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:th="http://www.thymeleaf.org">
+	
+	<head>
+	    <title>Book List</title>
+	    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	    <link rel="stylesheet" 
+			th:href="@{https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css}" 
+			th:integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" 
+			th:crossorigin="anonymous" 
+		/>
+	</head>
+	
+	<body>
+		<div class="container-fluid">
+			<h1>Add book</h1>
+			<div th:if="${param.error}">
+				<p>The ISBN number you provided has already existed in the database. </p>
+			</div>
+			<div>
+				<form class="form" th:object="${book}" th:action="@{save}" action="#" method="post">
+				  	<label for="author">Author</label>
+				  	<!-- [th:field]s must have the same variable name as in the class variables' names -->
+					<input type="text" id="author" th:field="*{author}" class="form-control" />
+					<div style="clear: both; display: block; height: 10px;"></div>
+				  	<label for="title">Title</label>
+					<input type="text" id="title" th:field="*{title}" class="form-control" />
+					<div style="clear: both; display: block; height: 10px;"></div>
+				  	<label for="isbn">ISBN</label>
+					<input type="text" th:field="*{isbn}" class="form-control" />
+				  	<div style="clear: both; display: block; height: 10px;"></div>
+				  	<div class="row">
+						<div class="col">
+					  		<label for="categorylist">Category</label>
+							<select id="categorylist" th:field="*{category}" class="form-control" >
+								<option th:each="category: ${categories}" th:value="${category.categoryid}" th:text="${category.name}" ></option>
+							</select>
+						</div>
+						<div class="col">
+							<label for="year">Year</label>
+							<input type="number" th:field="*{year}" class="form-control" />
+						</div>						
+					</div>
+					<div style="clear: both; display: block; height: 10px;"></div>
+					<label for="price">Price</label>
+					<input type= "text" th:field="*{price}" class="form-control" />
+					<div style="clear: both; display: block; height: 10px;"></div>
+					<input type="submit" value="Save" class="btn btn-success btn-block"></input>
+					<a href="/booklist" class="btn btn-secondary btn-block">Cancel</a>
+				</form>
+			</div>
+		</div>
+	</body>
+</html>

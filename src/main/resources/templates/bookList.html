@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+		>
+	<head>
+		<title>Book List</title>
+		<link rel="stylesheet" 
+			th:href="@{https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css}" 
+			th:integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" 
+			th:crossorigin="anonymous" 
+		/>
+	</head>
+	
+	<body>
+		<div class="container-fluid">
+			<div class="row align-items-center">
+				<div class="col-sm-5">
+					<h1>Book List</h1>
+				</div>
+				<div class="col-sm-5">
+					<h3 th:inline="text">Welcome, [[${#httpServletRequest.remoteUser}]]</h3>
+				</div>
+				<div class="col-sm-2" style="padding:20px 0">
+					<form th:action="@{/logout}" method="post">
+						<input type="submit" value="Sign Out" class="btn btn-outline-secondary btn-sm"/>
+					</form>
+				</div>
+			</div>
+			<table class="table">
+				<thead class="thead-dark">
+					<tr>
+						<th>Author</th>
+						<th>Title</th>
+						<th>Category</th>
+						<th>ISBN</th>
+						<th>Year</th>
+						<th sec:authorize="hasAuthority('ADMIN')"></th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="book: ${books}">
+						<td th:text="${book.author}"></td>
+						<td th:text="${book.title}"></td>
+						<td th:text="${book.category.name}"></td>
+						<td th:text="${book.isbn}"></td>
+						<td th:text="${book.year}"></td>
+						<!-- Use hasAuthority instead of hasRole when working with User from database -->
+						<td sec:authorize="hasAuthority('ADMIN')">
+							<a th:href="@{/delete/{id}(id=${book.id})}" class="btn btn-danger btn-sm">
+								Delete
+							</a>
+						</td>
+						<td><a th:href="@{/edit/{id}(id=${book.id})}" class="btn btn-warning btn-sm">Edit</a></td>
+					</tr>
+				</tbody>
+			</table>
+			<a href="/add" class="btn btn-success">Add Book</a>
+		</div>
+	</body>
+</html>
